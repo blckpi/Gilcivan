@@ -1,10 +1,12 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
 export const getVTInsights = async (inputValue: number, vtValue: number, finalValue: number) => {
   try {
+    // A inicialização da IA foi movida para dentro desta função.
+    // Isso garante que o app não quebre ao carregar se a API_KEY não estiver presente.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: `O usuário converteu ${inputValue} para ${vtValue} VT (fórmula: valor/4 + 1). 
