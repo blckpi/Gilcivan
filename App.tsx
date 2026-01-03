@@ -1,7 +1,6 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { CalculationResult } from './types';
-import { getVTInsights } from './geminiService';
 
 const App: React.FC = () => {
   const getInitialTheme = (): 'light' | 'dark' => {
@@ -15,8 +14,6 @@ const App: React.FC = () => {
 
   const [theme, setTheme] = useState(getInitialTheme);
   const [multiplier, setMultiplier] = useState<number>(2);
-  const [aiResponse, setAiResponse] = useState<string>('');
-  const [loadingAI, setLoadingAI] = useState<boolean>(false);
   const historyRef = useRef<HTMLDivElement>(null);
 
   // Mode state
@@ -118,13 +115,6 @@ const App: React.FC = () => {
     setCurrentSumInput('0');
   };
   
-  const askAI = async () => {
-    setLoadingAI(true);
-    const insight = await getVTInsights(results.inputValue, results.vtValue, results.finalValue);
-    setAiResponse(insight);
-    setLoadingAI(false);
-  };
-
   const KeyButton = ({ children, onClick, className = "", variant = "default" }: any) => {
     const baseClasses = "flex items-center justify-center text-lg font-bold rounded-xl transition-all duration-200 active:scale-95 py-3 select-none";
     const variants: Record<string, string> = { default: "bg-slate-200/50 dark:bg-slate-800/60 hover:bg-slate-300/70 dark:hover:bg-slate-700/70 text-slate-800 dark:text-slate-200 border border-slate-300/50 dark:border-slate-700/30", action: "bg-blue-500/10 dark:bg-blue-600/10 hover:bg-blue-500/20 dark:hover:bg-blue-600/30 text-blue-600 dark:text-blue-400 border border-blue-500/20 dark:border-blue-500/20", danger: "bg-rose-500/10 dark:bg-rose-600/10 hover:bg-rose-500/20 dark:hover:bg-rose-600/30 text-rose-500 dark:text-rose-400 border border-rose-500/20 dark:border-rose-500/20" };
@@ -215,19 +205,6 @@ const App: React.FC = () => {
               <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500">VT+</span>
             </div>
           </div>
-        </div>
-
-        <div className="glass rounded-2xl overflow-hidden border-purple-500/10">
-          <button onClick={askAI} disabled={loadingAI} className="w-full flex items-center justify-between px-5 py-3 bg-purple-500/5 hover:bg-purple-500/10 transition-all group">
-            <div className="flex items-center gap-2.5">
-              <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center">
-                <i className={`fa-solid fa-sparkles text-purple-600 dark:text-purple-400 text-[10px] ${loadingAI ? 'animate-spin' : ''}`}></i>
-              </div>
-              <span className="text-[10px] font-bold text-slate-700 dark:text-slate-400 uppercase tracking-widest">Análise Prospectiva</span>
-            </div>
-            <i className="fa-solid fa-chevron-right text-slate-500 dark:text-slate-700 text-[10px]"></i>
-          </button>
-          {(aiResponse || loadingAI) && (<div className="p-4 pt-1 bg-purple-500/5">{loadingAI ? (<div className="flex gap-1 py-1"><div className="w-1 h-1 bg-purple-500/50 rounded-full animate-bounce"></div><div className="w-1 h-1 bg-purple-500/50 rounded-full animate-bounce [animation-delay:0.2s]"></div><div className="w-1 h-1 bg-purple-500/50 rounded-full animate-bounce [animation-delay:0.4s]"></div></div>) : (<p className="text-[11px] text-slate-600 dark:text-slate-500 italic leading-snug">{aiResponse}</p>)}</div>)}
         </div>
       </main>
 

@@ -5,8 +5,3 @@ export interface CalculationResult {
   multiplier: number;
   finalValue: number;
 }
-
-export interface AIInsight {
-  summary: string;
-  recommendation: string;
-}
