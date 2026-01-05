@@ -127,13 +127,13 @@ const App: React.FC = () => {
   };
   
   const KeyButton = ({ children, onClick, className = "", variant = "default" }: any) => {
-    const baseClasses = "flex items-center justify-center text-lg font-bold rounded-xl transition-all duration-200 active:scale-95 py-3 select-none";
+    const baseClasses = "flex items-center justify-center text-lg font-bold rounded-xl transition-all duration-200 active:scale-95 py-2.5 sm:py-3 select-none";
     const variants: Record<string, string> = { default: "bg-slate-200/50 dark:bg-slate-800/60 hover:bg-slate-300/70 dark:hover:bg-slate-700/70 text-slate-800 dark:text-slate-200 border border-slate-300/50 dark:border-slate-700/30", action: "bg-blue-500/10 dark:bg-blue-600/10 hover:bg-blue-500/20 dark:hover:bg-blue-600/30 text-blue-600 dark:text-blue-400 border border-blue-500/20 dark:border-blue-500/20", danger: "bg-rose-500/10 dark:bg-rose-600/10 hover:bg-rose-500/20 dark:hover:bg-rose-600/30 text-rose-500 dark:text-rose-400 border border-rose-500/20 dark:border-rose-500/20" };
     return (<button onClick={onClick} className={`${baseClasses} ${variants[variant]} ${className}`}>{children}</button>);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden relative">
+    <div className="min-h-screen flex flex-col items-center justify-start sm:justify-center p-2 sm:p-4 overflow-x-hidden relative">
       <div className="absolute top-4 right-4 z-10 flex gap-2">
         <button onClick={toggleMode} className="w-10 h-10 rounded-full flex items-center justify-center text-slate-500 bg-slate-200/70 dark:bg-slate-800/70 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-300 shadow-md" aria-label="Toggle mode">
           <i className={`fa-solid ${mode === 'calc' ? 'fa-plus-minus' : 'fa-calculator'}`}></i>
@@ -148,14 +148,14 @@ const App: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-400/20 dark:bg-emerald-600/10 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
       </div>
 
-      <header className="mb-6 text-center">
+      <header className="my-3 sm:mb-6 text-center">
         <h1 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-emerald-500 to-teal-500 dark:from-blue-400 dark:via-emerald-400 dark:to-teal-400 tracking-tight">VT CALC</h1>
         <p className="text-slate-500 text-[10px] font-medium tracking-[0.3em] uppercase opacity-80">{mode === 'calc' ? 'conversor' : 'Modo de Soma'}</p>
       </header>
 
-      <main className="w-full max-w-sm space-y-4">
-        <div className="glass rounded-[2rem] p-5 shadow-2xl dark:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.4),_0_8px_10px_-6px_rgba(0,0,0,0.4)]">
-          <div className="bg-slate-200/60 dark:bg-slate-900/60 rounded-2xl p-4 mb-4 border border-slate-300/50 dark:border-slate-800 flex flex-col items-end gap-0.5 shadow-inner min-h-[80px] justify-end">
+      <main className="w-full max-w-sm space-y-3">
+        <div className="glass rounded-[2rem] p-4 sm:p-5 shadow-2xl dark:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.4),_0_8px_10px_-6px_rgba(0,0,0,0.4)]">
+          <div className="bg-slate-200/60 dark:bg-slate-900/60 rounded-2xl p-4 mb-4 border border-slate-300/50 dark:border-slate-800 flex flex-col items-end gap-0.5 shadow-inner min-h-[72px] justify-end">
             <div className="text-lg text-slate-500 font-mono self-end break-all h-6">
               {mode === 'sum' && (currentSumInput !== '0' ? currentSumInput : '')}
             </div>
@@ -178,7 +178,7 @@ const App: React.FC = () => {
                   </button>
                 )}
               </div>
-              <div className="max-h-28 overflow-y-auto space-y-1.5 pr-1">
+              <div className="max-h-24 overflow-y-auto space-y-1.5 pr-1">
                 {calcHistory.length === 0 ? (
                   <p className="text-center text-xs text-slate-400 py-4">Nenhum cálculo salvo.</p>
                 ) : (
@@ -223,7 +223,7 @@ const App: React.FC = () => {
             )}
           </div>
 
-          <div className="space-y-2.5 bg-slate-200/50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-300/50 dark:border-slate-800/50">
+          <div className="space-y-2 bg-slate-200/50 dark:bg-slate-900/40 p-3 rounded-2xl border border-slate-300/50 dark:border-slate-800/50">
             <div className="flex justify-between items-center px-1">
               <label className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">compra</label>
               <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold">{multiplier.toFixed(1)}x</span>
@@ -232,15 +232,15 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="glass rounded-2xl p-4 border-blue-500/10 flex flex-col justify-center">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          <div className="glass rounded-2xl p-3 border-blue-500/10 flex flex-col justify-center">
             <span className="text-[9px] font-bold text-blue-600/60 dark:text-blue-400/60 uppercase mb-1">Moeda VT</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-bold mono text-slate-900 dark:text-white">{results.vtValue.toFixed(2)}</span>
               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">vt</span>
             </div>
           </div>
-          <div className="glass rounded-2xl p-4 border-emerald-500/10 bg-emerald-500/5 flex flex-col justify-center">
+          <div className="glass rounded-2xl p-3 border-emerald-500/10 bg-emerald-500/5 flex flex-col justify-center">
             <span className="text-[9px] font-bold text-emerald-600/60 dark:text-emerald-400/60 uppercase mb-1">Final</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-bold mono text-emerald-600 dark:text-emerald-400">{results.finalValue.toFixed(2)}</span>
@@ -250,7 +250,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <footer className="mt-8 text-center text-slate-400 dark:text-slate-800 text-[8px] font-bold uppercase tracking-[0.3em]">VT Digital Systems &bull; Session Secured</footer>
+      <footer className="mt-4 text-center text-slate-400 dark:text-slate-800 text-[8px] font-bold uppercase tracking-[0.3em]">VT Digital Systems &bull; Session Secured</footer>
     </div>
   );
 };
