@@ -22,6 +22,7 @@ const App: React.FC = () => {
 
   // State for 'calc' mode
   const [currentOperand, setCurrentOperand] = useState<string>('40');
+  const [calcHistory, setCalcHistory] = useState<CalculationResult[]>([]);
 
   // State for 'sum' mode
   const [sumTotal, setSumTotal] = useState<number>(0);
@@ -47,6 +48,7 @@ const App: React.FC = () => {
     setSumTotal(0);
     setCurrentSumInput('0');
     setSumHistory([]);
+    setCalcHistory([]);
   };
 
   const displayValue = useMemo(() => {
@@ -91,6 +93,15 @@ const App: React.FC = () => {
       setCurrentOperand(currentOperand + digit);
     }
   };
+  const handleSaveToHistory = () => {
+    if (!results || results.inputValue === 0) return;
+    setCalcHistory(prev => [results, ...prev]);
+    setCurrentOperand('0');
+  };
+  const clearCalcHistory = () => {
+    setCalcHistory([]);
+  };
+
 
   // --- Handlers for 'sum' mode ---
   const clearSum = () => {
@@ -157,6 +168,36 @@ const App: React.FC = () => {
             </div>
           )}
 
+          {mode === 'calc' && (
+            <div className="bg-slate-200/50 dark:bg-slate-900/40 p-2 rounded-xl mb-4">
+              <div className="flex justify-between items-center mb-2 px-1">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Histórico</h3>
+                {calcHistory.length > 0 && (
+                  <button onClick={clearCalcHistory} className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 text-[10px] font-bold transition px-2 py-1 rounded">
+                    Limpar
+                  </button>
+                )}
+              </div>
+              <div className="max-h-28 overflow-y-auto space-y-1.5 pr-1">
+                {calcHistory.length === 0 ? (
+                  <p className="text-center text-xs text-slate-400 py-4">Nenhum cálculo salvo.</p>
+                ) : (
+                  calcHistory.map((item, index) => (
+                    <div key={index} className="bg-slate-100/50 dark:bg-slate-800/40 rounded-lg p-2 text-xs flex flex-col gap-1">
+                      <div className="flex justify-between items-baseline font-mono">
+                        <span className="text-slate-500">Entrada: <span className="font-bold text-slate-700 dark:text-slate-300">{item.inputValue.toLocaleString()}</span></span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">{item.finalValue.toFixed(2)} VT+</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 font-mono">
+                        <span>{item.vtValue.toFixed(2)}vt &bull; {item.multiplier.toFixed(1)}x</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
           <div className={`grid ${mode === 'calc' ? 'grid-cols-3' : 'grid-cols-4'} gap-2 mb-4`}>
             {mode === 'calc' ? (
               <>
@@ -164,7 +205,8 @@ const App: React.FC = () => {
                 <KeyButton onClick={() => appendDigitCalc('.')}>.</KeyButton>
                 <KeyButton onClick={() => appendDigitCalc('0')}>0</KeyButton>
                 <KeyButton onClick={deleteDigitCalc} variant="action"><i className="fa-solid fa-delete-left"></i></KeyButton>
-                <KeyButton onClick={clearCalc} variant="danger" className="col-span-3">C</KeyButton>
+                <KeyButton onClick={clearCalc} variant="danger" className="col-span-2">C</KeyButton>
+                <KeyButton onClick={handleSaveToHistory} variant="action"><i className="fa-solid fa-floppy-disk"></i></KeyButton>
               </>
             ) : (
               <>
