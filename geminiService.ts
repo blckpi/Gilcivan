@@ -3,9 +3,11 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 export const getVTInsights = async (inputValue: number, vtValue: number, finalValue: number) => {
   try {
-    // A inicialização da IA foi movida para dentro desta função.
-    // Isso garante que o app não quebre ao carregar se a API_KEY não estiver presente.
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+    if (!apiKey) {
+      return "Chave de API não encontrada. Defina a VITE_GEMINI_API_KEY no arquivo .env.";
+    }
+    const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
